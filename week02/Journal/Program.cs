@@ -1,74 +1,57 @@
 using System;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
-public class Journal
+class Program
 {
-    private List<Entry> _entries = new List<Entry>();
-    private List<string> _prompts = new List<string>
+    static void Main(string[] args)
     {
-        "Who was the most interesting person I interacted with today?",
-        "What was the best part of my day?",
-        "How did I see the hand of the Lord in my life today?",
-        "What was the strongest emotion I felt today?",
-        "If I had one thing I could do over today, what would it be?"
-    };
+        Journal journal = new Journal();
+        bool running = true;
 
-    private Random _random = new Random();
-
-    public void WriteNewEntry()
-    {
-        string prompt = _prompts[_random.Next(_prompts.Count)];
-        Console.WriteLine($"\nPrompt: {prompt}");
-        Console.Write("Your response: ");
-        string response = Console.ReadLine();
-
-        string date = DateTime.Now.ToString("yyyy-MM-dd");
-        _entries.Add(new Entry(date, prompt, response));
-    }
-
-    public void DisplayJournal()
-    {
-        Console.WriteLine("\n--- Journal Entries ---");
-        foreach (Entry entry in _entries)
+        while (running)
         {
-            Console.WriteLine(entry.ToString());
-        }
-    }
+            Console.WriteLine("\n--- Journal Menu ---");
+            Console.WriteLine("1. Write a new entry");
+            Console.WriteLine("2. Display journal");
+            Console.WriteLine("3. Save journal to file");
+            Console.WriteLine("4. Load journal from file");
+            Console.WriteLine("5. Quit");
+            Console.Write("Choose an option (1-5): ");
 
-    public void SaveToFile(string filename)
-    {
-        using (StreamWriter writer = new StreamWriter(filename))
-        {
-            foreach (Entry entry in _entries)
+            string choice = Console.ReadLine();
+
+            switch (choice)
             {
-                writer.WriteLine($"{entry.Date}|{entry.Prompt}|{entry.Response}");
+                case "1":
+                    journal.WriteNewEntry();
+                    break;
+                case "2":
+                    journal.DisplayJournal();
+                    break;
+                case "3":
+                    Console.Write("Enter filename to save: ");
+                    string saveFile = Console.ReadLine();
+                    journal.SaveToFile(saveFile);
+                    break;
+                case "4":
+                    Console.Write("Enter filename to load: ");
+                    string loadFile = Console.ReadLine();
+                    journal.LoadFromFile(loadFile);
+                    break;
+                case "5":
+                    running = false;
+                    Console.WriteLine("Goodbye!");
+                    break;
+                default:
+                    Console.WriteLine("Invalid option. Please try again.");
+                    break;
             }
         }
-        Console.WriteLine("Journal saved successfully.");
-    }
-
-    public void LoadFromFile(string filename)
-    {
-        if (!File.Exists(filename))
-        {
-            Console.WriteLine("File not found.");
-            return;
-        }
-
-        _entries.Clear();
-        string[] lines = File.ReadAllLines(filename);
-
-        foreach (string line in lines)
-        {
-            string[] parts = line.Split('|');
-            if (parts.Length == 3)
-            {
-                _entries.Add(new Entry(parts[0], parts[1], parts[2]));
-            }
-        }
-        Console.WriteLine("Journal loaded successfully.");
     }
 }
+
+/*
+EXCEEDING REQUIREMENTS:
+- Uses three separate classes in three files (Entry.cs, Journal.cs, Program.cs).
+- Abstraction demonstrated: Entry stores entry data, Journal manages logic, Program handles user menu.
+- Could be extended to save/load as JSON or CSV to exceed requirements further.
+*/
