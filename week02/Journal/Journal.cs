@@ -30,6 +30,11 @@ public class Journal
     public void DisplayJournal()
     {
         Console.WriteLine("\n--- Journal Entries ---");
+        if (_entries.Count == 0)
+        {
+            Console.WriteLine("No entries yet.");
+            return;
+        }
         foreach (Entry entry in _entries)
         {
             Console.WriteLine(entry.ToString());

@@ -1,6 +1,35 @@
 using System;
 using System.Collections.Generic;
 
+class Comment
+{
+    public string CommenterName { get; set; }
+    public string Text { get; set; }
+
+    public void DisplayComment()
+    {
+        Console.WriteLine($"{CommenterName}: {Text}");
+    }
+}
+
+class Video
+{
+    public string Title { get; set; }
+    public string Author { get; set; }
+    public int Length { get; set; } // length in seconds
+    public List<Comment> Comments { get; set; } = new List<Comment>();
+
+    public void DisplayInfo()
+    {
+        Console.WriteLine($"Title: {Title}, Author: {Author}, Length: {Length} seconds");
+        Console.WriteLine("Comments:");
+        foreach (var comment in Comments)
+        {
+            comment.DisplayComment();
+        }
+    }
+}
+
 // Comment class
 class Comment
 {
@@ -51,7 +80,7 @@ class Video
 // Program entry
 class Program
 {
-    static void Main(string[] args)
+    static void Main()
     {
         // Create some videos
         Video video1 = new Video("Learn C# in 10 Minutes", "Alice", 600);
